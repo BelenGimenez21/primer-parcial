@@ -16,6 +16,7 @@ app.use(express.json());
 
 //importacion de rutas
 app.use(require('./src/routes/user.routes'));
+app.use(require('./src/routes/task.routes'));
 
 //puerto
 //const port = 8000;
