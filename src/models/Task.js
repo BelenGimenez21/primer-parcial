@@ -9,9 +9,17 @@ const taskSchema = new Schema({
         type: String,
         required: true,
     },
+    status: {
+        type: String,
+        default: 'Pendiente',
+    },
     isActive: {
         type: Boolean,
         default: true,
+    },
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'users'
     },
 }, {
     versionKey: false,

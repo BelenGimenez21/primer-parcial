@@ -17,7 +17,8 @@ taskController.postTask = async (req, res) => {
     // Se instancia un nuevo documento de MongoDB para luego ser guardado
     const newTask = new task({
         title,
-        description
+        description,
+        userId
     });
 
     try {

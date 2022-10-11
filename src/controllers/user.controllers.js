@@ -1,8 +1,10 @@
 const user = require('../models/User');
+const bcrypt = require('bcrypt')
+//const { encriptarPassword } = require('../helpers/password')
 
 const userController = {};
 
-/*----------controlador para obtener usuarios activos de la bd----------*/
+/*----------controlador para obtener todos los usuarios activos de la bd----------*/
 userController.getUser = async (req, res) => {
     //se consultan los documentos en la bd
     const users = await user.find({isActive:true});
@@ -15,10 +17,14 @@ userController.postUser = async (req, res) => {
     //se obtienen los datos
     const { username, password, email } = req.body;
 
+    //encriptar la contraseña
+    //const passwordEncriptada = encriptarPassword(password);
+    const passwordEncriptada = bcrypt.hashSync(password, 10);
+
     //se instancia un nuevo documento en MongoDB
     const newUser = new user({
         username,
-        password,
+        password: passwordEncriptada,
         email
     });
 
@@ -32,7 +38,7 @@ userController.postUser = async (req, res) => {
     
     } catch (error) {
         console.log(error);
-        res.json('Error al guardar usuario')
+        res.json('Error al crear el usuario')
     }  
 };
 
@@ -48,7 +54,7 @@ userController.putUser = async (req, res) => {
     }
 
     if (password) {
-        update.password = password;
+        update.password = bcrypt.hashSync(password, 10);
     }
 
     if (email) {
