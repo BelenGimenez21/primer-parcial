@@ -10,7 +10,6 @@ const authController = {}
 authController.postLoginUser = async (req, res) => {
     const { email, password } = req.body;
 
-    /*   TRY-CATCH   */
     //buscar por email del usuario si este existe en la bd y esta activo
     const user = await User.findOne({ email });
 

@@ -24,11 +24,11 @@ const userSchema = new Schema({
     timestamps: true
 });
 
-// userSchema.methods.toJSON = () => {
-//     const { password, _id, ...user } = userSchema.methods.toObject();
-//     user.uid = _id;
+userSchema.methods.toJSON = () => {
+    const { password, _id, ...user } = userSchema.methods.toObject();
+    user.uid = _id;
 
-//     return user;
-// }
+    return user;
+}
 
 module.exports = model('user', userSchema);
