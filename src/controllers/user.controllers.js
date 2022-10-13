@@ -4,13 +4,13 @@ const bcrypt = require('bcrypt')
 
 const userController = {};
 
-/*----------controlador para obtener todos los usuarios activos de la bd----------*/
-userController.getUser = async (req, res) => {
-    //se consultan los documentos en la bd
-    const users = await user.find({isActive:true});
-    //se devuelven todos los usuarios activos en un arreglo
-    return res.json(users);
-};
+// /*----------controlador para obtener todos los usuarios activos de la bd----------*/
+// userController.getUser = async (req, res) => {
+//     //se consultan los documentos en la bd
+//     const users = await user.find({isActive:true});
+//     //se devuelven todos los usuarios activos en un arreglo
+//     return res.json(users);
+// };
 
 /*----------controlador para crear y guardar un nuevo usuario en la bd----------*/
 userController.postUser = async (req, res) => {
@@ -30,7 +30,10 @@ userController.postUser = async (req, res) => {
 
     try {
         //se guarda el documento en la bd
-        const savedUser = await newUser.save();
+        const savedUser = await newUser.save()
+        console.log(savedUser)
+
+        //const savedUser = await user.findOne({email})
         return res.json({
             msg: 'Usuario creado correctamente',
             savedUser

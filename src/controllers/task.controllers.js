@@ -8,7 +8,7 @@ taskController.getTasks = async (req, res) => {
 
     const tasks = await Task.find({ userId, isActive: true });
 
-    if (!tasks) {
+    if (!tasks || tasks.length===0) {
         return res.status(400).json({
             message: 'No se encontraron tareas del usuario.'
         });
@@ -108,7 +108,7 @@ taskController.deleteTask = async (req, res) => {
     const taskId = req.params.taskId;
     const userId = req.user._id;
 
-    const filter = { _id: taskId, userId }
+    const filter = { _id: taskId, userId, isActive: true }
     const update = { isActive: false }
 
     const deletedTask = await Task.findOneAndUpdate(filter, update);
