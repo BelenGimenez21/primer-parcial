@@ -24,7 +24,14 @@ const userSchema = new Schema({
     timestamps: true
 });
 
- userSchema.methods.toJSON = () => {
+// UserSchema.methods.toJSON = function() {
+//     const { password, _id, ...user } = this.toObject();
+//     user.uid = _id;
+
+//     return user;
+// }
+
+userSchema.methods.toJSON = () => {
     const methods = typeof userSchema.methods !== 'object' ? userSchema.methods.toObject() : userSchema.methods;
     const { password, _id, ...user } = methods;
     user.uid = _id;

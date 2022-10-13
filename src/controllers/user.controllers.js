@@ -1,16 +1,12 @@
 const user = require('../models/User');
 const bcrypt = require('bcrypt')
-//const { encriptarPassword } = require('../helpers/password')
 
 const userController = {};
 
-// /*----------controlador para obtener todos los usuarios activos de la bd----------*/
-// userController.getUser = async (req, res) => {
-//     //se consultan los documentos en la bd
-//     const users = await user.find({isActive:true});
-//     //se devuelven todos los usuarios activos en un arreglo
-//     return res.json(users);
-// };
+/*----------controlador para obtener datos del usuario loggeado----------*/
+userController.getUser = (req, res) => {
+    return res.json({ ...req.user._doc });
+};
 
 /*----------controlador para crear y guardar un nuevo usuario en la bd----------*/
 userController.postUser = async (req, res) => {
@@ -18,7 +14,6 @@ userController.postUser = async (req, res) => {
     const { username, password, email } = req.body;
 
     //encriptar la contraseña
-    //const passwordEncriptada = encriptarPassword(password);
     const passwordEncriptada = bcrypt.hashSync(password, 10);
 
     //se instancia un nuevo documento en MongoDB
@@ -47,9 +42,10 @@ userController.postUser = async (req, res) => {
 
 /*----------controlador para modificar datos de un usuario----------*/
 userController.putUser = async (req, res) => {
-    const id =  req.params.id;
-    const { username, password, email, ...otrosDatos } = req.body;
+    const id =  req.user._id;
+    const { username, password, email } = req.body;
 
+    const filter = { _id: id, isActive: true }
     const update = {}
 
     if (username) {
@@ -65,8 +61,10 @@ userController.putUser = async (req, res) => {
     }
 
     try {
-        await user.findByIdAndUpdate(id, update)
-        const updatedUser = await user.findById(id);
+        await user.findOneAndUpdate(filter, update)
+        const updatedUser = await user.findById(id)
+        console.log(updatedUser)
+
         return res.json({
             msg: 'Usuario actualizado correctamente',
             updatedUser
@@ -79,7 +77,7 @@ userController.putUser = async (req, res) => {
 
 /*----------controlador para eliminar usuarios----------*/
 userController.deleteUser = async (req, res) => {
-    const id = req.params.id;
+    const id = req.user._id;
 
     try {
         await user.findByIdAndUpdate(id, {isActive: false})

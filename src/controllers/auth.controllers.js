@@ -2,8 +2,6 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const generarJWT = require('../helpers/generarJWT');
 
-//const { validarPassword } = require('./../helpers/password');
-
 const authController = {}
 
 /*----------controlador para iniciar sesión----------*/
@@ -25,9 +23,6 @@ authController.postLoginUser = async (req, res) => {
         });
     }
 
-    //const passwordEncriptada = user.password;
-    //const validarContra = await validarPassword(password, passwordEncriptada);
-
     const validarPassword = bcrypt.compareSync(password, user.password);
 
     if (!validarPassword) {
@@ -41,11 +36,6 @@ authController.postLoginUser = async (req, res) => {
     const token = await generarJWT(uid)
     
     return res.json({ token });
-};
-
-/*----------controlador para obtener datos del usuario loggeado----------*/
-authController.getLoginUser = (req, res) => {
-    return res.json({ ...req.user._doc });
 };
 
 module.exports = authController;
